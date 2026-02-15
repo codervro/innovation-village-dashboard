@@ -1,0 +1,100 @@
+{
+  "name": "Main Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [-96, 0],
+      "id": "42991b5e-7fc5-463d-8bdd-a6c6e0011b13",
+      "name": "When chat message received"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "# Overview\nYou are an orchestrator agent. Your only job is to delegate the task to the correct tool. No need to write emails or create summaries."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [128, 0],
+      "id": "236481a8-1988-4585-a58d-62337c752688",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [144, 224],
+      "id": "3f1309c2-3f5d-44db-9282-bce52a9ff6e6",
+      "name": "GPT 4.0 mini",
+      "credentials": {
+        "openRouterApi": {
+          "name": "YOUR_OPENROUTER_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Call This Tool To Take any Actions!",
+        "source": "=database",
+        "workflowId": "SUB_AGENT_WORKFLOW_ID",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {}
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [288, 224],
+      "id": "628c8b09-d44c-40c5-8868-ba4aa8591206",
+      "name": "Email Agent"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT 4.0 mini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "tags": []
+}

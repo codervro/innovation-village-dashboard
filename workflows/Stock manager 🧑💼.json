@@ -1,0 +1,117 @@
+{
+  "name": "Stock Manager",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Radhe Radhe 🌼\nHi there! 👋\nMy Name Is Stock Manager. How can I assist you today?"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [-80, -16],
+      "id": "cc7779d5-7407-458b-ba7d-dffb45ead7f9",
+      "name": "When chat message received"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": "YOUR_GOOGLE_SHEET_ID",
+        "sheetName": "Sheet1"
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [400, 208],
+      "id": "6126f73b-10cc-48fc-8026-ee0ec26adfbb",
+      "name": "Update Inventory",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "YOUR_GOOGLE_SHEETS_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": "YOUR_GOOGLE_SHEET_ID",
+        "sheetName": "Sheet1"
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [528, 208],
+      "id": "f5aa0ff6-4548-4b41-9b69-3f11060eaea5",
+      "name": "Search Inventory",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "YOUR_GOOGLE_SHEETS_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": "YOUR_GOOGLE_SHEET_ID",
+        "sheetName": "Sheet1"
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [656, 208],
+      "id": "9fa0abcf-a410-4653-a4e1-8dd41ebc99de",
+      "name": "Delete Rows",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "YOUR_GOOGLE_SHEETS_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "documentId": "YOUR_GOOGLE_SHEET_ID",
+        "title": "New Inventory Sheet"
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [784, 208],
+      "id": "d7f515f1-b436-477b-b982-cdc94272bdbb",
+      "name": "Create Sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "YOUR_GOOGLE_SHEETS_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an inventory management assistant. Always use tools to fetch real data."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [128, -16],
+      "id": "0e6f730e-3556-4f2d-b0d0-17ada653d57e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini"
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [16, 256],
+      "id": "98ed2434-ba4a-4e61-a3a9-a74fc84d7673",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "name": "YOUR_OPENROUTER_ACCOUNT"
+        }
+      }
+    }
+  ],
+  "connections": {},
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "tags": []
+}

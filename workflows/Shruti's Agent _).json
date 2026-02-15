@@ -1,0 +1,80 @@
+{
+  "name": "Shruti's Agent :)",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "UGC Image Pro",
+        "formFields": {
+          "values": [
+            { "fieldLabel": "Image", "fieldType": "file" },
+            { "fieldLabel": "Prompt", "requiredField": true }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [-128, -16],
+      "id": "670d3571-dd05-4652-8355-4ed245012714",
+      "name": "On form submission"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload?key=YOUR_IMGBB_API_KEY",
+        "sendBody": true,
+        "contentType": "multipart-form-data"
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [80, -16],
+      "id": "563bcd89-02dd-443f-9451-27f33d96d14a",
+      "name": "Upload Image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/flux-pro",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Key YOUR_FAL_API_KEY"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [848, 0],
+      "id": "b75f9034-3421-40ef-8330-976530495ab5",
+      "name": "Queue Image"
+    },
+    {
+      "parameters": {
+        "url": "={{$('Que Image').item.json.status_url}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Key YOUR_FAL_API_KEY"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [1248, 0],
+      "id": "d4275397-72b7-4a5d-ab2d-42cdeb1e0eb3",
+      "name": "Retrieve Image"
+    }
+  ],
+  "connections": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "tags": []
+}

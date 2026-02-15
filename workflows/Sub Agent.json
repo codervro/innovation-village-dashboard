@@ -1,0 +1,64 @@
+{
+  "name": "Sub Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 0],
+      "id": "d44a75fb-24bc-40ca-b84c-4069c99f7006",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [208, 0],
+      "id": "6dcaf371-6add-45d7-bd54-fe6ea1496314",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini"
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [80, 208],
+      "id": "3cf9ee9f-0ccd-4a43-934e-283a8d7cd71a",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "name": "YOUR_OPENROUTER_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $fromAI('To') }}",
+        "subject": "={{ $fromAI('Subject') }}",
+        "message": "={{ $fromAI('Message') }}"
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [368, 208],
+      "id": "81014fa2-19ea-4744-bfe7-9f1666cd3cf8",
+      "name": "Send Email",
+      "credentials": {
+        "gmailOAuth2": {
+          "name": "YOUR_GMAIL_ACCOUNT"
+        }
+      }
+    }
+  ],
+  "connections": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "tags": []
+}

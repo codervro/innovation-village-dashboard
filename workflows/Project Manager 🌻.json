@@ -1,0 +1,102 @@
+{
+  "name": "Project Manager 🌻",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an AI agent that manages information in a Google Sheet..."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [256, 0],
+      "id": "dbf0103d-be4d-4667-8a31-6f9730a08b77",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "documentId": "YOUR_GOOGLE_SHEET_ID",
+        "sheetName": "Sheet1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [816, 144],
+      "id": "84c66018-f1ee-471d-a75f-75908317b765",
+      "name": "Search Project",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "YOUR_GOOGLE_SHEETS_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": "YOUR_GOOGLE_SHEET_ID",
+        "sheetName": "Sheet1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [672, 208],
+      "id": "9c59c827-6dd3-4792-af25-60ab43b6cfce",
+      "name": "Update Project",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "name": "YOUR_GOOGLE_SHEETS_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $fromAI('To') }}",
+        "subject": "={{ $fromAI('Subject') }}",
+        "message": "={{ $fromAI('Message') }}"
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [320, 272],
+      "id": "a9a5669d-43d2-48af-8434-74043040ef99",
+      "name": "Send Email",
+      "credentials": {
+        "gmailOAuth2": {
+          "name": "YOUR_GMAIL_ACCOUNT"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Radhe Radhe 🌼\nHi there! 👋\nMy Name Is Project Manager. How can I assist you today?"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [0, 32],
+      "id": "03a4f8d9-d5e7-4c85-91eb-74ab1772caa2",
+      "name": "When chat message received"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-4o-mini"
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [-16, 256],
+      "id": "f19fa09d-9466-4327-bf41-d5da6a2091a6",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "name": "YOUR_OPENROUTER_ACCOUNT"
+        }
+      }
+    }
+  ],
+  "connections": {},
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "tags": []
+}
